@@ -4,6 +4,7 @@ using Nancy.Bootstrapper;
 using NLog;
 using RawRabbit;
 using RawRabbit.vNext;
+using RawRabbit.Configuration;
 using Warden.Common.Commands;
 using Warden.Common.Commands.ApiKeys;
 using Warden.Common.Commands.Users;
@@ -43,7 +44,10 @@ namespace Warden.Services.Users.Framework
                 builder.RegisterType<DatabaseSeeder>().As<IDatabaseSeeder>();
                 builder.RegisterType<Encrypter>().As<IEncrypter>();
                 builder.RegisterType<Auth0RestClient>().As<IAuth0RestClient>();
-                builder.RegisterInstance(BusClientFactory.CreateDefault()).As<IBusClient>();
+                var rawRabbitConfiguration = _configuration.GetSettings<RawRabbitConfiguration>();
+                builder.RegisterInstance(rawRabbitConfiguration).SingleInstance();
+                builder.RegisterInstance(BusClientFactory.CreateDefault(rawRabbitConfiguration))
+                    .As<IBusClient>();
                 builder.RegisterType<CreateApiKeyHandler>().As<ICommandHandler<CreateApiKey>>();
                 builder.RegisterType<SignInUserHandler>().As<ICommandHandler<SignInUser>>();
                 builder.RegisterType<UserPaymentPlanCreatedHandler>().As<IEventHandler<UserPaymentPlanCreated>>();
