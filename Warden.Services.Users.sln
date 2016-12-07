@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Warden.Services.Users", "Warden.Services.Users.xproj", "{BEFC036D-7B0A-4517-A833-D607130F61DB}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Warden.Services.Users", "Warden.Services.Users\Warden.Services.Users.xproj", "{BEFC036D-7B0A-4517-A833-D607130F61DB}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Warden.Services.Users.Tests", "Warden.Services.Users.Tests\Warden.Services.Users.Tests.xproj", "{0BB52999-CFFA-4D3C-9B81-B84E2A33FF72}"
 EndProject
