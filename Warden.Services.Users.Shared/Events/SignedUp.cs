@@ -8,8 +8,6 @@ namespace Warden.Services.Users.Shared.Events
         public Guid RequestId { get; }
         public string UserId { get; }
         public string Email { get; }
-        public string Name { get; }
-        public string PictureUrl { get; }
         public string Role { get; }
         public string State { get; }
         public string Provider { get; }
@@ -20,15 +18,12 @@ namespace Warden.Services.Users.Shared.Events
         {
         }
 
-        public SignedUp(Guid requestId, string userId, string email, string name,
-            string pictureUrl, string role, string state, string provider,
-            string externalUserId, DateTime createdAt)
+        public SignedUp(Guid requestId, string userId, string email, string role,
+            string state, string provider, string externalUserId, DateTime createdAt)
         {
             RequestId = requestId;
             UserId = userId;
             Email = email;
-            Name = name;
-            PictureUrl = pictureUrl;
             Role = role;
             State = state;
             Provider = provider;

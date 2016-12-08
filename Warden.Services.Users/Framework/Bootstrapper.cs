@@ -8,13 +8,11 @@ using RawRabbit.Configuration;
 using Warden.Common.Commands;
 using Warden.Common.Commands.ApiKeys;
 using Warden.Common.Commands.Users;
-using Warden.Common.Encryption;
 using Warden.Common.Events;
 using Warden.Common.Events.Features;
 using Warden.Common.Extensions;
 using Warden.Common.Mongo;
 using Warden.Common.Nancy;
-using Warden.Services.Users.Auth0;
 using Warden.Services.Users.Handlers;
 using Warden.Services.Users.Repositories;
 using Warden.Services.Users.Services;
@@ -38,12 +36,9 @@ namespace Warden.Services.Users.Framework
             container.Update(builder =>
             {
                 builder.RegisterInstance(_configuration.GetSettings<MongoDbSettings>());
-                builder.RegisterInstance(_configuration.GetSettings<Auth0Settings>());
                 builder.RegisterModule<MongoDbModule>();
                 builder.RegisterType<MongoDbInitializer>().As<IDatabaseInitializer>();
                 builder.RegisterType<DatabaseSeeder>().As<IDatabaseSeeder>();
-                builder.RegisterType<Encrypter>().As<IEncrypter>();
-                builder.RegisterType<Auth0RestClient>().As<IAuth0RestClient>();
                 var rawRabbitConfiguration = _configuration.GetSettings<RawRabbitConfiguration>();
                 builder.RegisterInstance(rawRabbitConfiguration).SingleInstance();
                 builder.RegisterInstance(BusClientFactory.CreateDefault(rawRabbitConfiguration))
@@ -55,6 +50,7 @@ namespace Warden.Services.Users.Framework
                 builder.RegisterType<ApiKeyRepository>().As<IApiKeyRepository>();
                 builder.RegisterType<UserService>().As<IUserService>();
                 builder.RegisterType<ApiKeyService>().As<IApiKeyService>();
+                builder.RegisterType<Encrypter>().As<IEncrypter>().SingleInstance();
             });
             LifetimeScope = container;
         }
@@ -74,7 +70,7 @@ namespace Warden.Services.Users.Framework
                 ctx.Response.Headers.Add("Access-Control-Allow-Origin", "*");
                 ctx.Response.Headers.Add("Access-Control-Allow-Headers", "Authorization, Origin, X-Requested-With, Content-Type, Accept");
             };
-            Logger.Info("Warden.Services.Users API Started");
+            Logger.Info("Warden.Services.Users API has started.");
         }
     }
 }
