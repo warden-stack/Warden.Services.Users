@@ -28,25 +28,29 @@ namespace Warden.Services.Users.Framework
             var users = new List<User>();
             for (var i = 1; i <= 10; i++)
             {
+                var name = $"warden-user{i}";
                 var user = new User(Guid.NewGuid().ToString("N"),
-                    $"warden-user{i}@mailinator.com", Roles.User);
+                    $"{name}@mailinator.com",
+                    Roles.User, Providers.Warden);
+                user.SetName(name);
                 user.Activate();
-                if (i == 1)
-                    user.SetUserId("57d068eaf78ad35973d0a747");
-
                 users.Add(user);
             }
             for (var i = 1; i < -3; i++)
             {
+                var name = $"warden-mod{i}";
                 var moderator = new User(Guid.NewGuid().ToString("N"),
-                    $"warden-moderator{i}@mailinator.com", Roles.Moderator);
+                    $"{name}@mailinator.com", Roles.Moderator, Providers.Warden);
+                moderator.SetName(name);
                 moderator.Activate();
                 users.Add(moderator);
             }
             for (var i = 1; i < -3; i++)
             {
+                var name = $"warden-admin{i}";
                 var admin = new User(Guid.NewGuid().ToString("N"),
-                    $"warden-admin{i}@mailinator.com", Roles.Administrator);
+                    $"{name}@mailinator.com", Roles.Administrator, Providers.Warden);
+                admin.SetName(name);
                 admin.Activate();
                 users.Add(admin);
             }

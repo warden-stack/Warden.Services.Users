@@ -2,6 +2,7 @@
 using Warden.Common.Domain;
 using Warden.Common.Exceptions;
 using Warden.Common.Extensions;
+using Warden.Services.Users.Shared;
 
 namespace Warden.Services.Users.Domain
 {
@@ -19,9 +20,15 @@ namespace Warden.Services.Users.Domain
         public ApiKey(Guid id, string key, string userId)
         {
             if (key.Empty())
-                throw new DomainException("API key can not be empty.");
+            {
+                throw new DomainException(OperationCodes.InvalidApiKey,
+                    "API key can not be empty.");
+            }
             if (userId.Empty())
-                throw new DomainException("Can not create an API key without user.");
+            {
+                throw new DomainException(OperationCodes.InvalidApiKey,
+                    "Can not create an API key without user.");
+            }
 
             Id = id;
             Key = key;

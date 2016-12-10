@@ -4,6 +4,7 @@ using MongoDB.Driver.Linq;
 using Warden.Common.Extensions;
 using Warden.Common.Mongo;
 using Warden.Services.Users.Domain;
+using Warden.Services.Users.Queries;
 
 namespace Warden.Services.Users.Repositories.Queries
 {
@@ -12,20 +13,49 @@ namespace Warden.Services.Users.Repositories.Queries
         public static IMongoCollection<User> Users(this IMongoDatabase database)
             => database.GetCollection<User>();
 
-        public static async Task<User> GetByUserId(this IMongoCollection<User> users, string externalId)
+        public static async Task<bool> ExistsAsync(this IMongoCollection<User> users, string name)
+            => await users.AsQueryable().AnyAsync(x => x.Name == name);
+
+        public static async Task<User> GetByUserIdAsync(this IMongoCollection<User> users, string userId)
         {
-            if (externalId.Empty())
+            if (userId.Empty())
                 return null;
 
-            return await users.AsQueryable().FirstOrDefaultAsync(x => x.UserId == externalId);
+            return await users.AsQueryable().FirstOrDefaultAsync(x => x.UserId == userId);
         }
 
-        public static async Task<User> GetByEmailAsync(this IMongoCollection<User> users, string email)
+        public static async Task<User> GetByExternalUserIdAsync(this IMongoCollection<User> users, string externalUserId)
+        {
+            if (externalUserId.Empty())
+                return null;
+
+            return await users.AsQueryable().FirstOrDefaultAsync(x => x.ExternalUserId == externalUserId);
+        }
+
+        public static async Task<User> GetByEmailAsync(this IMongoCollection<User> users, string email, string provider)
         {
             if (email.Empty())
                 return null;
+            if (provider.Empty())
+                return null;
 
-            return await users.AsQueryable().FirstOrDefaultAsync(x => x.Email == email);
+            return await users.AsQueryable().FirstOrDefaultAsync(x => x.Email == email && x.Provider == provider);
+        }
+
+        public static async Task<User> GetByNameAsync(this IMongoCollection<User> users, string name)
+        {
+            if (name.Empty())
+                return null;
+
+            return await users.AsQueryable().FirstOrDefaultAsync(x => x.Name == name);
+        }
+
+        public static IMongoQueryable<User> Query(this IMongoCollection<User> users,
+            BrowseUsers query)
+        {
+            var values = users.AsQueryable();
+
+            return values.OrderBy(x => x.Name);
         }
     }
 }
