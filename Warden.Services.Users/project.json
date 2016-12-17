@@ -7,6 +7,7 @@
   "dependencies": {
     "Warden.Common": "1.0.*",
     "Warden.Services.Users.Shared": "1.0.*",
+    "Warden.Services.Features.Shared": "1.0.*",
     "Autofac": "4.1.0",
 	  "AutoMapper": "5.2.0",
 	  "Lockbox.Client": "1.0.0-beta-2",
