@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
-using Warden.Common.Extensions;;
+using Warden.Common.Extensions;
 
 namespace Warden.Services.Users.Services
 {
