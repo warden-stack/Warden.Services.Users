@@ -8,6 +8,7 @@ using RawRabbit;
 using RawRabbit.vNext;
 using RawRabbit.Configuration;
 using Warden.Common.Commands;
+using Warden.Common.Events;
 using Warden.Common.Exceptionless;
 using Warden.Common.Extensions;
 using Warden.Common.Handlers;
@@ -71,6 +72,7 @@ namespace Warden.Services.Users.Framework
                 builder.RegisterType<ExceptionlessExceptionHandler>().As<IExceptionHandler>().SingleInstance();
                 var assembly = typeof(Startup).GetTypeInfo().Assembly;
                 builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(ICommandHandler<>));
+                builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(IEventHandler<>));
             });
             LifetimeScope = container;
         }
