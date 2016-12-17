@@ -23,6 +23,15 @@ namespace Warden.Services.Users.Repositories.Queries
             return await apiKeys.AsQueryable().FirstOrDefaultAsync(x => x.Key == key);
         }
 
+        public static async Task<ApiKey> GetAsync(this IMongoCollection<ApiKey> apiKeys,
+            string userId, string name)
+        {
+            if (userId.Empty() || name.Empty())
+                return null;
+
+            return await apiKeys.AsQueryable().FirstOrDefaultAsync(x => x.UserId == userId && x.Name == name);
+        }
+
         public static async Task<ApiKey> GetAsync(this IMongoCollection<ApiKey> apiKeys, Guid id)
         {
             if (id.IsEmpty())

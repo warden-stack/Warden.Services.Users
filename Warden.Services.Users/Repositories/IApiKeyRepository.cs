@@ -10,7 +10,8 @@ namespace Warden.Services.Users.Repositories
     {
         Task<Maybe<PagedResult<ApiKey>>> BrowseAsync(BrowseApiKeys query);
         Task<Maybe<ApiKey>> GetAsync(Guid id);
-        Task<Maybe<ApiKey>> GetByKeyAsync(string key);
+        Task<Maybe<ApiKey>> GetAsync(string key);
+        Task<Maybe<ApiKey>> GetAsync(string userId, string name);
         Task AddAsync(ApiKey apiKey);
         Task DeleteAsync(string key);
     }

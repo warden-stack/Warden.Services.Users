@@ -9,9 +9,9 @@ namespace Warden.Services.Users.Services
     public interface IApiKeyService
     {
         Task<Maybe<PagedResult<ApiKey>>> BrowseAsync(BrowseApiKeys query);
-        Task<Maybe<ApiKey>> GetAsync(string key);
+        Task<Maybe<ApiKey>> GetAsync(string userId, string name);
         Task<Maybe<ApiKey>> GetAsync(Guid id);
-        Task CreateAsync(Guid id, string userId);
+        Task CreateAsync(Guid id, string userId, string name);
         Task DeleteAsync(string key);
     }
 }

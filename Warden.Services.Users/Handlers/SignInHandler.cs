@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using NLog;
 using RawRabbit;
 using Warden.Common.Commands;
-using Warden.Common.Events.Users;
 using Warden.Common.Handlers;
 using Warden.Common.Types;
 using Warden.Services.Users.Domain;
@@ -54,7 +53,7 @@ namespace Warden.Services.Users.Handlers
                             throw new ArgumentException($"Invalid provider: {command.Provider}", nameof(command.Provider));
                     }
                 })
-                .OnSuccess(async () => await _bus.PublishAsync(new UserSignedIn(command.Request.Id,
+                .OnSuccess(async () => await _bus.PublishAsync(new SignedIn(command.Request.Id,
                     user.Value.UserId, user.Value.Email, user.Value.Name, user.Value.Provider)))
                 .OnCustomError(async ex => await _bus.PublishAsync(new SignInRejected(command.Request.Id,
                     null, ex.Code, ex.Message, command.Provider)))

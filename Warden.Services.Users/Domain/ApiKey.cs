@@ -11,13 +11,14 @@ namespace Warden.Services.Users.Domain
         public Guid Id { get; protected set; }
         public string Key { get; protected set; }
         public string UserId { get; protected set; }
+        public string Name { get; protected set; }
         public DateTime CreatedAt { get; protected set; }
 
         protected ApiKey()
         {
         }
 
-        public ApiKey(Guid id, string key, string userId)
+        public ApiKey(Guid id, string key, string userId, string name)
         {
             if (key.Empty())
             {
@@ -29,10 +30,16 @@ namespace Warden.Services.Users.Domain
                 throw new DomainException(OperationCodes.InvalidApiKey,
                     "Can not create an API key without user.");
             }
+            if (name.Empty())
+            {
+                throw new DomainException(OperationCodes.InvalidApiKey,
+                    "Can not create an API key without name.");
+            }
 
             Id = id;
             Key = key;
             UserId = userId;
+            Name = name;
             CreatedAt = DateTime.UtcNow;
         }
     }

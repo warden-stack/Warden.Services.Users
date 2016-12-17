@@ -12,6 +12,7 @@ namespace Warden.Services.Users.Shared.Dto
         public string Role { get; set; }
         public string State { get; set; }
         public string ExternalUserId { get; set; }
+        public Guid? PaymentPlanId { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }

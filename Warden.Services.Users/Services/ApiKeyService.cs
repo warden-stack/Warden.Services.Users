@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Warden.Common.Domain;
 using Warden.Common.Exceptions;
 using Warden.Common.Types;
 using Warden.Services.Users.Domain;
@@ -25,13 +24,13 @@ namespace Warden.Services.Users.Services
         public async Task<Maybe<PagedResult<ApiKey>>> BrowseAsync(BrowseApiKeys query)
             => await _repository.BrowseAsync(query);
 
-        public async Task<Maybe<ApiKey>> GetAsync(string key)
-            => await _repository.GetByKeyAsync(key);
+        public async Task<Maybe<ApiKey>> GetAsync(string userId, string name)
+            => await _repository.GetAsync(userId, name);
 
         public async Task<Maybe<ApiKey>> GetAsync(Guid id) 
             => await _repository.GetAsync(id);
 
-        public async Task CreateAsync(Guid id, string userId)
+        public async Task CreateAsync(Guid id, string userId, string name)
         {
             var isValid = false;
             var currentTry = 0;
@@ -39,7 +38,7 @@ namespace Warden.Services.Users.Services
             while (currentTry < RetryTimes)
             {
                 key = _encrypter.GetRandomSecureKey();
-                isValid = (await _repository.GetByKeyAsync(key)).HasNoValue;
+                isValid = (await _repository.GetAsync(key)).HasNoValue;
                 if (isValid)
                     break;
 
@@ -49,13 +48,13 @@ namespace Warden.Services.Users.Services
             if (!isValid)
                 throw new ServiceException("Could not create an API key, please try again.");
 
-            var apiKey = new ApiKey(id, key, userId);
+            var apiKey = new ApiKey(id, key, userId, name);
             await _repository.AddAsync(apiKey);
         }
 
         public async Task DeleteAsync(string key)
         {
-            var apiKey = await _repository.GetByKeyAsync(key);
+            var apiKey = await _repository.GetAsync(key);
             if (apiKey.HasNoValue)
                 throw new ServiceException($"Desired API key does not exist! Key: {key}.");
 

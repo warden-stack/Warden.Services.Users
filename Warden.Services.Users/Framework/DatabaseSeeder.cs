@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using MongoDB.Driver;
 using Warden.Common.Mongo;
 using Warden.Services.Users.Domain;
-using Warden.Services.Users.Queries;
 using Warden.Services.Users.Repositories.Queries;
 using Warden.Services.Users.Services;
 
@@ -57,7 +56,8 @@ namespace Warden.Services.Users.Framework
             await _database.Users().InsertManyAsync(users);
             foreach (var user in users)
             {
-                await _apiKeyService.CreateAsync(Guid.NewGuid(), user.UserId);
+                var name = $"key-{user.Name}";
+                await _apiKeyService.CreateAsync(Guid.NewGuid(), user.UserId, name);
             }
         }
     }

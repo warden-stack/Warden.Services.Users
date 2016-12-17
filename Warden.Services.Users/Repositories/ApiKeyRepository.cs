@@ -26,8 +26,11 @@ namespace Warden.Services.Users.Repositories
         public async Task<Maybe<ApiKey>> GetAsync(Guid id)
             => await _database.ApiKeys().GetAsync(id);
 
-        public async Task<Maybe<ApiKey>> GetByKeyAsync(string key)
+        public async Task<Maybe<ApiKey>> GetAsync(string key)
             => await _database.ApiKeys().GetAsync(key);
+
+        public async Task<Maybe<ApiKey>> GetAsync(string userId, string name)
+            => await _database.ApiKeys().GetAsync(userId, name);
 
         public async Task AddAsync(ApiKey apiKey)
             => await _database.ApiKeys().InsertOneAsync(apiKey);
