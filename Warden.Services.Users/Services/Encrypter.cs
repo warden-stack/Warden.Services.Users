@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+using Warden.Common.Extensions;;
 
 namespace Warden.Services.Users.Services
 {
@@ -12,8 +13,8 @@ namespace Warden.Services.Users.Services
             ":", "'", "\"", "[", "]", "{", "}", "|", "%", "#", "$", "^", "8", "(", ")"
         };
 
-        private static readonly int MinSaltSize = 8;
-        private static readonly int MaxSaltSize = 12;
+        private static readonly int DeriveBytesIterationsCount = 10000;
+        private static readonly int SaltSize = 40;
         private static readonly int MinSecureKeySize = 40;
         private static readonly int MaxSecureKeySize = 60;
         private static readonly Random Random = new Random();
@@ -39,7 +40,7 @@ namespace Warden.Services.Users.Services
         public string GetSalt(string value)
         {
             var random = new Random();
-            var saltSize = random.Next(MinSaltSize, MaxSaltSize);
+            var saltSize = random.Next(SaltSize);
             var saltBytes = new byte[saltSize];
             var rng = RandomNumberGenerator.Create();
             rng.GetBytes(saltBytes);
@@ -49,13 +50,22 @@ namespace Warden.Services.Users.Services
 
         public string GetHash(string value, string salt)
         {
-            using (var sha512 = SHA512.Create())
-            {
-                var bytes = Encoding.Unicode.GetBytes(value + salt);
-                var hash = sha512.ComputeHash(bytes);
+            if (value.Empty())
+                throw new ArgumentException("Can not generate hash from an empty value.", nameof(value));
+            if (salt.Empty())
+                throw new ArgumentException("Can not use an empty salt from hashing value.", nameof(value));
 
-                return Convert.ToBase64String(hash);
-            }
+            var pbkdf2 = new Rfc2898DeriveBytes(value, GetBytes(salt), DeriveBytesIterationsCount);
+
+            return Convert.ToBase64String(pbkdf2.GetBytes(SaltSize));
+        }
+
+        private static byte[] GetBytes(string value)
+        {
+            var bytes = new byte[value.Length * sizeof(char)];
+            Buffer.BlockCopy(value.ToCharArray(), 0, bytes, 0, bytes.Length);
+
+            return bytes;
         }
     }
 }

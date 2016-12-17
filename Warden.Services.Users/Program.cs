@@ -3,6 +3,7 @@ using Warden.Common.Commands.Users;
 using Warden.Common.Events.Features;
 using Warden.Common.Host;
 using Warden.Services.Users.Framework;
+using Warden.Services.Users.Shared.Commands;
 
 namespace Warden.Services.Users
 {
@@ -15,7 +16,9 @@ namespace Warden.Services.Users
                 .UseAutofac(Bootstrapper.LifetimeScope)
                 .UseRabbitMq(queueName: typeof(Program).Namespace)
                 .SubscribeToCommand<CreateApiKey>()
-                .SubscribeToCommand<SignInUser>()
+                .SubscribeToCommand<SignIn>()
+                .SubscribeToCommand<SignUp>()
+                .SubscribeToCommand<SignOut>()
                 .SubscribeToEvent<UserPaymentPlanCreated>()
                 .Build()
                 .Run();
