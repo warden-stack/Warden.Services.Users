@@ -9,7 +9,7 @@ namespace Warden.Services.Users.Modules
     {
         public ApiKeyModule(IApiKeyService apiKeyService)
         {
-            Get("users/{userId}/api-keys", async args => await FetchCollection<BrowseApiKeys, ApiKey>
+            Get("api-keys", async args => await FetchCollection<BrowseApiKeys, ApiKey>
                 (async x => await apiKeyService.BrowseAsync(x))
                 .MapTo<ApiKeyDto>()
                 .HandleAsync());

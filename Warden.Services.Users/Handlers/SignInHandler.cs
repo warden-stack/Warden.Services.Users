@@ -91,8 +91,12 @@ namespace Warden.Services.Users.Handlers
             }
 
             var userId = Guid.NewGuid().ToString("N");
+            var name = $"user-{userId}";
+
+            //TODO: Set incomplete account without default name.
             await _userService.SignUpAsync(userId, facebookUser.Value.Email,
-                Roles.User, Providers.Facebook, externalUserId: externalUserId);
+                Roles.User, Providers.Facebook, externalUserId: externalUserId,
+                name: name);
 
             Logger.Info($"Created new user with id: '{userId}' using Facebook user id: '{externalUserId}'");
 
