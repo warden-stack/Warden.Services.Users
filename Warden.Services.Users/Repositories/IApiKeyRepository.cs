@@ -13,6 +13,6 @@ namespace Warden.Services.Users.Repositories
         Task<Maybe<ApiKey>> GetAsync(string key);
         Task<Maybe<ApiKey>> GetAsync(string userId, string name);
         Task AddAsync(ApiKey apiKey);
-        Task DeleteAsync(string key);
+        Task DeleteAsync(Guid id);
     }
 }

@@ -1,4 +1,3 @@
-﻿using System;
 using System.Threading.Tasks;
 using RawRabbit;
 using Warden.Common.Commands;
@@ -10,13 +9,13 @@ using Warden.Services.Users.Shared.Events;
 
 namespace Warden.Services.Users.Handlers
 {
-    public class CreateApiKeyHandler : ICommandHandler<CreateApiKey>
+    public class DeleteApiKeyHandler : ICommandHandler<DeleteApiKey>
     {
         private readonly IHandler _handler;
         private readonly IBusClient _bus;
         private readonly IApiKeyService _apiKeyService;
 
-        public CreateApiKeyHandler(IHandler handler, IBusClient bus,
+        public DeleteApiKeyHandler(IHandler handler, IBusClient bus,
             IApiKeyService apiKeyService)
         {
             _bus = bus;
@@ -24,21 +23,21 @@ namespace Warden.Services.Users.Handlers
             _apiKeyService = apiKeyService;
         }
 
-        public async Task HandleAsync(CreateApiKey command)
+        public async Task HandleAsync(DeleteApiKey command)
         {
             await _handler.Run(async () =>
-                await _apiKeyService.CreateAsync(Guid.NewGuid(), command.UserId, command.Name))
+                await _apiKeyService.DeleteAsync(command.UserId, command.Name))
             .OnSuccess(async () => 
-                await _bus.PublishAsync(new ApiKeyCreated(command.Request.Id, command.UserId, command.Name)))
-            .OnCustomError(async ex => await _bus.PublishAsync(new CreateApiKeyRejected(command.Request.Id,
+                await _bus.PublishAsync(new ApiKeyDeleted(command.Request.Id, command.UserId, command.Name)))
+            .OnCustomError(async ex => await _bus.PublishAsync(new DeleteApiKeyRejected(command.Request.Id,
                     command.Name, command.UserId, ex.Code, ex.Message)))
             .OnError(async (ex, logger) =>
             {
-                logger.Error(ex, $"Error occured while creating API key with name: '{command.Name}'.");
-                await _bus.PublishAsync(new CreateApiKeyRejected(command.Request.Id,
+                logger.Error(ex, $"Error occured while deleting API key with name: '{command.Name}'.");
+                await _bus.PublishAsync(new DeleteApiKeyRejected(command.Request.Id,
                     command.Name, command.UserId, OperationCodes.Error, ex.Message));
             })
             .ExecuteAsync();
-        }
+        }        
     }
 }

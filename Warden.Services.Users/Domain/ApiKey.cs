@@ -39,7 +39,7 @@ namespace Warden.Services.Users.Domain
             Id = id;
             Key = key;
             UserId = userId;
-            Name = name;
+            Name = name.ToLowerInvariant();
             CreatedAt = DateTime.UtcNow;
         }
     }

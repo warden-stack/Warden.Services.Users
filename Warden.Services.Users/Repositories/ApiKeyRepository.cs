@@ -30,12 +30,12 @@ namespace Warden.Services.Users.Repositories
             => await _database.ApiKeys().GetAsync(key);
 
         public async Task<Maybe<ApiKey>> GetAsync(string userId, string name)
-            => await _database.ApiKeys().GetAsync(userId, name);
+            => await _database.ApiKeys().GetAsync(userId, name.ToLowerInvariant());
 
         public async Task AddAsync(ApiKey apiKey)
             => await _database.ApiKeys().InsertOneAsync(apiKey);
 
-        public async Task DeleteAsync(string key)
-            => await _database.ApiKeys().DeleteOneAsync(x => x.Key == key);
+        public async Task DeleteAsync(Guid id)
+            => await _database.ApiKeys().DeleteOneAsync(x => x.Id == id);
     }
 }

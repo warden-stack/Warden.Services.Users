@@ -66,7 +66,7 @@ namespace Warden.Services.Users.Framework
                 builder.RegisterType<OneTimeSecuredOperationService>().As<IOneTimeSecuredOperationService>();
                 builder.RegisterType<PasswordService>().As<IPasswordService>();
                 builder.RegisterType<UserService>().As<IUserService>();
-                builder.RegisterType<Handler>().As<IHandler>().SingleInstance();
+                builder.RegisterType<Handler>().As<IHandler>();
                 RabbitMqContainer.Register(builder, _configuration.GetSettings<RawRabbitConfiguration>());
                 builder.RegisterInstance(_configuration.GetSettings<ExceptionlessSettings>()).SingleInstance();
                 builder.RegisterType<ExceptionlessExceptionHandler>().As<IExceptionHandler>().SingleInstance();

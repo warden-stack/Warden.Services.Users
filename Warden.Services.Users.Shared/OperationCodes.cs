@@ -8,6 +8,8 @@
         public static string InactiveUser => "inactive_user";
         public static string InvalidUser => "invalid_user";
         public static string InvalidApiKey => "invalid_api_key";
+        public static string ApiKeyNameInUse => "api_key_name_in_use";
+        public static string ApiKeyNotFound => "api_key_not_found";
         public static string SessionNotFound => "session_not_found";
         public static string InvalidSessionKey => "invalid_session_key";
         public static string SessionExpired => "session_expired";

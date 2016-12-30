@@ -12,6 +12,6 @@ namespace Warden.Services.Users.Services
         Task<Maybe<ApiKey>> GetAsync(string userId, string name);
         Task<Maybe<ApiKey>> GetAsync(Guid id);
         Task CreateAsync(Guid id, string userId, string name);
-        Task DeleteAsync(string key);
+        Task DeleteAsync(string userId, string name);
     }
 }
