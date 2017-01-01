@@ -14,10 +14,12 @@ using Warden.Common.Extensions;
 using Warden.Common.Handlers;
 using Warden.Common.Mongo;
 using Warden.Common.Nancy;
+using Warden.Common.Nancy.Serialization;
 using Warden.Common.RabbitMq;
 using Warden.Services.Users.Repositories;
 using Warden.Services.Users.Services;
 using Warden.Services.Users.Settings;
+using Newtonsoft.Json;
 
 namespace Warden.Services.Users.Framework
 {
@@ -40,6 +42,7 @@ namespace Warden.Services.Users.Framework
             {
                 builder.RegisterInstance(_configuration.GetSettings<MongoDbSettings>());
                 builder.RegisterInstance(_configuration.GetSettings<RawRabbitConfiguration>());
+                builder.RegisterType<CustomJsonSerializer>().As<JsonSerializer>().SingleInstance();
                 builder.RegisterModule<MongoDbModule>();
                 builder.RegisterType<MongoDbInitializer>().As<IDatabaseInitializer>();
                 builder.RegisterType<DatabaseSeeder>().As<IDatabaseSeeder>();
