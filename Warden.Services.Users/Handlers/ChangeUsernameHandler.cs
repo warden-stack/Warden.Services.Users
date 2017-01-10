@@ -9,13 +9,13 @@ using Warden.Services.Users.Shared.Events;
 
 namespace Warden.Services.Users.Handlers
 {
-    public class ChangeUserNameHandler : ICommandHandler<ChangeUserName>
+    public class ChangeUsernameHandler : ICommandHandler<ChangeUsername>
     {
         private readonly IHandler _handler;
         private readonly IBusClient _bus;
         private readonly IUserService _userService;
 
-        public ChangeUserNameHandler(IHandler handler, 
+        public ChangeUsernameHandler(IHandler handler, 
             IBusClient bus, IUserService userService)
         {
             _handler = handler;
@@ -23,14 +23,14 @@ namespace Warden.Services.Users.Handlers
             _userService = userService;
         }
 
-        public async Task HandleAsync(ChangeUserName command)
+        public async Task HandleAsync(ChangeUsername command)
         {
             await _handler
                 .Run(async () => await _userService.ChangeNameAsync(command.UserId, command.Name))
                 .OnSuccess(async () =>
                 {
                     var user = await _userService.GetAsync(command.UserId);
-                    await _bus.PublishAsync(new UserNameChanged(command.Request.Id, 
+                    await _bus.PublishAsync(new UsernameChanged(command.Request.Id, 
                         command.UserId, command.Name, user.Value.State));
                 })
                 .OnCustomError(async ex => await _bus.PublishAsync(new ChangeUsernameRejected(command.Request.Id,
