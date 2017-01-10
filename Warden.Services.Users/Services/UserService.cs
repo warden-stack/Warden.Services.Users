@@ -66,12 +66,13 @@ namespace Warden.Services.Users.Services
             {
                 throw new ServiceException(OperationCodes.InvalidPassword,
                     $"Password can not be empty!");
-
             }
 
             user = new User(userId, email, role, provider, pictureUrl);
             if (!password.Empty())
+            {
                 user.Value.SetPassword(password, _encrypter);
+            }
             if (name.NotEmpty())
             {
                 user.Value.SetName(name);

@@ -12,8 +12,8 @@ namespace Warden.Services.Users.Framework
             {
                 cfg.CreateMap<ApiKey, ApiKeyDto>();
                 cfg.CreateMap<User, UserDto>();
-//                cfg.CreateMap<dynamic, AvailableResourceDto>()
-//                    .ForMember(x => x.IsAvailable, o => o.MapFrom(s => s));
+                cfg.CreateMap<dynamic, AvailableResourceDto>()
+                   .ForMember(x => x.IsAvailable, o => o.MapFrom(s => s));
                 cfg.CreateMap<UserSession, UserSessionDto>();
             });
 
