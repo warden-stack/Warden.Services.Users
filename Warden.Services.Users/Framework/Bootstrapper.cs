@@ -4,8 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Nancy;
 using Nancy.Bootstrapper;
 using NLog;
-using RawRabbit;
-using RawRabbit.vNext;
 using RawRabbit.Configuration;
 using Warden.Common.Commands;
 using Warden.Common.Events;
@@ -16,6 +14,7 @@ using Warden.Common.Mongo;
 using Warden.Common.Nancy;
 using Warden.Common.Nancy.Serialization;
 using Warden.Common.RabbitMq;
+using Warden.Common.Security;
 using Warden.Services.Users.Repositories;
 using Warden.Services.Users.Services;
 using Warden.Services.Users.Settings;
@@ -41,15 +40,10 @@ namespace Warden.Services.Users.Framework
             container.Update(builder =>
             {
                 builder.RegisterInstance(_configuration.GetSettings<MongoDbSettings>());
-                builder.RegisterInstance(_configuration.GetSettings<RawRabbitConfiguration>());
                 builder.RegisterType<CustomJsonSerializer>().As<JsonSerializer>().SingleInstance();
                 builder.RegisterModule<MongoDbModule>();
                 builder.RegisterType<MongoDbInitializer>().As<IDatabaseInitializer>();
                 builder.RegisterType<DatabaseSeeder>().As<IDatabaseSeeder>();
-                var rawRabbitConfiguration = _configuration.GetSettings<RawRabbitConfiguration>();
-                builder.RegisterInstance(rawRabbitConfiguration).SingleInstance();
-                builder.RegisterInstance(BusClientFactory.CreateDefault(rawRabbitConfiguration))
-                    .As<IBusClient>();
                 builder.RegisterType<UserRepository>().As<IUserRepository>();
                 builder.RegisterType<ApiKeyRepository>().As<IApiKeyRepository>();
                 builder.RegisterType<UserService>().As<IUserService>();
@@ -70,12 +64,15 @@ namespace Warden.Services.Users.Framework
                 builder.RegisterType<PasswordService>().As<IPasswordService>();
                 builder.RegisterType<UserService>().As<IUserService>();
                 builder.RegisterType<Handler>().As<IHandler>();
-                RabbitMqContainer.Register(builder, _configuration.GetSettings<RawRabbitConfiguration>());
                 builder.RegisterInstance(_configuration.GetSettings<ExceptionlessSettings>()).SingleInstance();
                 builder.RegisterType<ExceptionlessExceptionHandler>().As<IExceptionHandler>().SingleInstance();
+
                 var assembly = typeof(Startup).GetTypeInfo().Assembly;
                 builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(ICommandHandler<>));
                 builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(IEventHandler<>));
+
+                SecurityContainer.Register(builder, _configuration);
+                RabbitMqContainer.Register(builder, _configuration.GetSettings<RawRabbitConfiguration>());
             });
             LifetimeScope = container;
         }
@@ -96,6 +93,7 @@ namespace Warden.Services.Users.Framework
                 ctx.Response.Headers.Add("Access-Control-Allow-Headers", "Authorization, Origin, X-Requested-With, Content-Type, Accept");
             };
             _exceptionHandler = container.Resolve<IExceptionHandler>();
+            pipelines.SetupTokenAuthentication(container);
             Logger.Info("Warden.Services.Users API has started.");
         }
 
