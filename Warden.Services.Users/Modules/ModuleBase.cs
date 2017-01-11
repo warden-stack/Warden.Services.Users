@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Nancy.Security;
 using Warden.Common.Nancy;
 
 namespace Warden.Services.Users.Modules
@@ -16,7 +17,7 @@ namespace Warden.Services.Users.Modules
         { 
             if (requireAuthentication)
             {
-                // this.RequiresAuthentication();
+                this.RequiresAuthentication();
             }
         }
     }
