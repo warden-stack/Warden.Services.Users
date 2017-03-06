@@ -1,4 +1,4 @@
-namespace Warden.Services.Users.Shared.Dto
+namespace Warden.Services.Users.Dto
 {
     public class AvailableResourceDto
     {

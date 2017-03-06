@@ -2,7 +2,7 @@
 using Warden.Services.Users.Domain;
 using Warden.Services.Users.Queries;
 using Warden.Services.Users.Services;
-using Warden.Services.Users.Shared.Dto;
+using Warden.Services.Users.Dto;
 
 namespace Warden.Services.Users.Modules
 {

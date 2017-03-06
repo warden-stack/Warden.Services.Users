@@ -1,7 +1,7 @@
 ﻿using Warden.Common.Host;
 using Warden.Services.Users.Framework;
-using Warden.Services.Users.Shared.Commands;
-using Warden.Services.Features.Shared.Events;
+using Warden.Messages.Commands.Users;
+using Warden.Messages.Events.Features;
 
 namespace Warden.Services.Users
 {

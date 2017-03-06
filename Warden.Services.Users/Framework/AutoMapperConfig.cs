@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Warden.Services.Users.Domain;
-using Warden.Services.Users.Shared.Dto;
+using Warden.Services.Users.Dto;
 
 namespace Warden.Services.Users.Framework
 {

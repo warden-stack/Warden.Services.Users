@@ -6,7 +6,7 @@ using Warden.Common.Types;
 using Warden.Services.Users.Domain;
 using Warden.Services.Users.Queries;
 using Warden.Services.Users.Repositories;
-using Warden.Services.Users.Shared;
+using Warden.Services.Users;
 
 namespace Warden.Services.Users.Services
 {

@@ -4,7 +4,7 @@ using Warden.Common.Domain;
 using Warden.Common.Exceptions;
 using Warden.Common.Extensions;
 using Warden.Services.Users.Services;
-using Warden.Services.Users.Shared;
+using Warden.Services.Users;
 
 namespace Warden.Services.Users.Domain
 {
